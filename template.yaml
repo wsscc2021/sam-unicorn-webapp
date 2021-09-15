@@ -1,0 +1,111 @@
+Transform: AWS::Serverless-2016-10-31
+
+Description: >
+  This project will provision to serverless web application that using API Gateway, Lambda and DynamoDB
+
+Globals:
+  Function:
+    Timeout: 30
+    Tracing: Active # Active or PassThrough
+    MemorySize: 1024
+    VpcConfig:
+      SecurityGroupIds: 
+        - sg-0cd7ea0fcf485c241
+      SubnetIds: 
+        - subnet-0c15ef39cdd9fe459
+        - subnet-072f8c5fa5ef1ad11
+
+# Metadata:
+#   template metadata
+
+# Parameters:
+#   set of parameters
+
+# Mappings:
+#   set of mappings
+
+# Conditions:
+#   set of conditions
+
+Resources:
+  DynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      TableName: unicorn
+      BillingMode: PAY_PER_REQUEST
+      # ProvisionedThroughput: 
+      #   ProvisionedThroughput
+      KeySchema: 
+        - AttributeName: unicornName
+          KeyType: HASH # HASH - Partition key, RANGE - Sort key
+      AttributeDefinitions: 
+        - AttributeName: unicornName
+          AttributeType: S
+      # ContributorInsightsSpecification: 
+      #   ContributorInsightsSpecification
+      # GlobalSecondaryIndexes: 
+      #   - GlobalSecondaryIndex
+      # KinesisStreamSpecification: 
+      #   KinesisStreamSpecification
+      # LocalSecondaryIndexes: 
+      #   - LocalSecondaryIndex
+      PointInTimeRecoverySpecification: 
+        PointInTimeRecoveryEnabled: True
+      SSESpecification: 
+        # KMSMasterKeyId: String
+        SSEEnabled: True
+        SSEType: KMS
+      # StreamSpecification: 
+      #   StreamSpecification
+      TimeToLiveSpecification: 
+        AttributeName: expire
+        Enabled: True
+      Tags: 
+        - Key: Name
+          Value: unicorn
+    
+  CreateUnicornFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: useast1-unicorn-createFunction
+      Description: description
+      # AssumeRolePolicyDocument: JSON
+      # AutoPublishAlias: String
+      # AutoPublishCodeSha256: String
+      # CodeSigningConfigArn: String
+      CodeUri: src/
+      Handler: createUnicorn.lambda_handler
+      # DeadLetterQueue: Map | DeadLetterQueue
+      # DeploymentPreference: DeploymentPreference
+      # Environment: Environment
+      # KmsKeyArn: String
+      # EventInvokeConfig: EventInvokeConfiguration
+      # Events: EventSource
+      # FileSystemConfigs: List
+      # ImageConfig: ImageConfig
+      # ImageUri: String
+      # InlineCode: String
+      # Layers: List
+      # MemorySize: 1024
+      PackageType: Zip # Zip or Imagee
+      # PermissionsBoundary: String
+      Policies: # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
+      - DynamoDBReadPolicy:
+          TableName: !Ref DynamoDBTable
+      # ProvisionedConcurrencyConfig: ProvisionedConcurrencyConfig
+      # ReservedConcurrentExecutions: Integer
+      # Role: String
+      Runtime: python3.8
+      # Tags: Map
+      # Timeout: 30
+      # Tracing: Active # Active or PassThrough
+      # VersionDescription: String
+      # VpcConfig:
+      #   SecurityGroupIds: 
+      #     - sg-0cd7ea0fcf485c241
+      #   SubnetIds: 
+      #     - subnet-0c15ef39cdd9fe459
+      #     - subnet-072f8c5fa5ef1ad11
+
+# Outputs:
+#   set of outputs
