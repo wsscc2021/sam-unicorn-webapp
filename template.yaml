@@ -87,7 +87,7 @@ Resources:
       # Role: String
       # AssumeRolePolicyDocument: JSON
       Policies: # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
-      - DynamoDBReadPolicy:
+      - DynamoDBWritePolicy:
           TableName: !Ref DynamoDBTable
       # ProvisionedConcurrencyConfig: ProvisionedConcurrencyConfig
       # ReservedConcurrentExecutions: Integer
