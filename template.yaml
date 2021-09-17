@@ -83,7 +83,18 @@ Resources:
       # Environment: Environment
       # KmsKeyArn: String
       # EventInvokeConfig: EventInvokeConfiguration
-      # Events: EventSource
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            # Auth: ApiFunctionAuth
+            Method: get
+            Path: /unicorns/{unicorn}
+            RequestModel:
+              Model: UnicornModel
+              Required: True
+            # RequestParameters: String | RequestParameter
+            RestApiId: !Ref APIGateway
       # Role: String
       # AssumeRolePolicyDocument: JSON
       Policies: # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
@@ -92,6 +103,53 @@ Resources:
       # ProvisionedConcurrencyConfig: ProvisionedConcurrencyConfig
       # ReservedConcurrentExecutions: Integer
       # Tags: Map
+
+  APIGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      # AccessLogSetting: AccessLogSetting
+      # Auth: ApiAuth
+      # BinaryMediaTypes: List
+      # CacheClusterEnabled: Boolean
+      # CacheClusterSize: String
+      # CanarySetting: CanarySetting
+      # Cors: String | CorsConfiguration
+      # DefinitionBody: String
+      # DefinitionUri: String | ApiDefinition
+      Description: APIGatewayDescription
+      # Domain: DomainConfiguration
+      # EndpointConfiguration: EndpointConfiguration
+      # GatewayResponses: Map
+      # MethodSettings: MethodSettings
+      # MinimumCompressionSize: Integer
+      Mode: overwrite # overwrite or merge
+      Models:
+        UnicornModel:
+          $schema: 'http://json-schema.org/draft-04/mySchema#'
+          type: object
+          properties:
+            intelligence:
+              type: integer
+              minimum: 0
+              maximum: 100
+            strength:
+              type: integer
+              minimum: 0
+              maximum: 100
+            luck:
+              type: integer
+              minimum: 0
+              maximum: 100
+          required:
+            - intelligence
+            - strength
+            - luck
+      Name: useast1-unicorn-apigateway
+      # OpenApiVersion: String
+      StageName: dev
+      # Tags: Map
+      TracingEnabled: True
+      # Variables: Map
 
 # Outputs:
 #   set of outputs
