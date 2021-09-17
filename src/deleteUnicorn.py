@@ -11,10 +11,11 @@ class ContentNotFound(Exception):
 @xray_recorder.capture('lambda_handler')
 def lambda_handler(event, context):
     try:
-        deleteUnicorn(event['unicorn'])
+        unicornName = event['pathParameters']['unicorn']
+        deleteUnicorn(unicornName)
         return {
             'statusCode': 200,
-            'body': json.dumps(f"Deleted {event['unicorn']}")
+            'body': json.dumps(f"Deleted {unicornName}")
         }
     except ContentNotFound as error:
         return {

@@ -12,15 +12,17 @@ class Forbidden(Exception):
 @xray_recorder.capture('lambda_handler')
 def lambda_handler(event, context):
     try:
+        unicornName = event['pathParameters']['unicorn']
+        body = json.loads(event['body'])
         response = createUnicorn(
-            unicornName=event['unicorn'],
-            intelligence=event['body']['intelligence'],
-            strength=event['body']['strength'],
-            luck=event['body']['luck']
+            unicornName=unicornName,
+            intelligence=body['intelligence'],
+            strength=body['strength'],
+            luck=body['luck']
         )
         return {
             'statusCode': 201,
-            'body': json.dumps(f"Created {event['unicorn']}")
+            'body': json.dumps(f"Created {unicornName}")
         }
     except KeyError as error:
         return {

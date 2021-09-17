@@ -229,6 +229,7 @@ Resources:
       # ReservedConcurrentExecutions: Integer
       # Tags: Map
 
+
   APIGateway:
     Type: AWS::Serverless::Api
     Properties:

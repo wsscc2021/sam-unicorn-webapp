@@ -11,8 +11,8 @@ class ContentNotFound(Exception):
 @xray_recorder.capture('lambda_handler')
 def lambda_handler(event, context):
     try:
-        if 'unicorn' in event:
-            result = getUnicorn(event['unicorn'])
+        if 'unicorn' in event['pathParameters']:
+            result = getUnicorn(event['pathParameters']['unicorn'])
         else:
             result = scanUnicorn()
         return {
