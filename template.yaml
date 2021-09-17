@@ -88,7 +88,7 @@ Resources:
           Type: Api
           Properties:
             # Auth: ApiFunctionAuth
-            Method: get
+            Method: post
             Path: /unicorns/{unicorn}
             RequestModel:
               Model: UnicornModel
@@ -99,6 +99,131 @@ Resources:
       # AssumeRolePolicyDocument: JSON
       Policies: # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
       - DynamoDBWritePolicy:
+          TableName: !Ref DynamoDBTable
+      # ProvisionedConcurrencyConfig: ProvisionedConcurrencyConfig
+      # ReservedConcurrentExecutions: Integer
+      # Tags: Map
+
+  UpdateUnicornFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: useast1-unicorn-updateFunction
+      Description: description
+      # AutoPublishAlias: String
+      # AutoPublishCodeSha256: String
+      # CodeSigningConfigArn: String
+      Runtime: python3.9
+      PackageType: Zip # Zip or Imagee
+      CodeUri: src/
+      Handler: updateUnicorn.lambda_handler
+      Layers:
+      - arn:aws:lambda:us-east-1:242593025403:layer:python-aws-xray-sdk:2
+      # DeadLetterQueue: Map | DeadLetterQueue
+      # DeploymentPreference: DeploymentPreference
+      # Environment: Environment
+      # KmsKeyArn: String
+      # EventInvokeConfig: EventInvokeConfiguration
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            # Auth: ApiFunctionAuth
+            Method: put
+            Path: /unicorns/{unicorn}
+            RequestModel:
+              Model: UnicornModel
+              Required: True
+            # RequestParameters: String | RequestParameter
+            RestApiId: !Ref APIGateway
+      # Role: String
+      # AssumeRolePolicyDocument: JSON
+      Policies: # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
+      - DynamoDBWritePolicy:
+          TableName: !Ref DynamoDBTable
+      # ProvisionedConcurrencyConfig: ProvisionedConcurrencyConfig
+      # ReservedConcurrentExecutions: Integer
+      # Tags: Map
+
+  DeleteUnicornFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: useast1-unicorn-deleteFunction
+      Description: description
+      # AutoPublishAlias: String
+      # AutoPublishCodeSha256: String
+      # CodeSigningConfigArn: String
+      Runtime: python3.9
+      PackageType: Zip # Zip or Imagee
+      CodeUri: src/
+      Handler: deleteUnicorn.lambda_handler
+      Layers:
+      - arn:aws:lambda:us-east-1:242593025403:layer:python-aws-xray-sdk:2
+      # DeadLetterQueue: Map | DeadLetterQueue
+      # DeploymentPreference: DeploymentPreference
+      # Environment: Environment
+      # KmsKeyArn: String
+      # EventInvokeConfig: EventInvokeConfiguration
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            # Auth: ApiFunctionAuth
+            Method: delete
+            Path: /unicorns/{unicorn}
+            # RequestModel: RequestModel
+            # RequestParameters: String | RequestParameter
+            RestApiId: !Ref APIGateway
+      # Role: String
+      # AssumeRolePolicyDocument: JSON
+      Policies: # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
+      - DynamoDBWritePolicy:
+          TableName: !Ref DynamoDBTable
+      # ProvisionedConcurrencyConfig: ProvisionedConcurrencyConfig
+      # ReservedConcurrentExecutions: Integer
+      # Tags: Map
+
+  GetUnicornFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: useast1-unicorn-getFunction
+      Description: description
+      # AutoPublishAlias: String
+      # AutoPublishCodeSha256: String
+      # CodeSigningConfigArn: String
+      Runtime: python3.9
+      PackageType: Zip # Zip or Imagee
+      CodeUri: src/
+      Handler: getUnicorn.lambda_handler
+      Layers:
+      - arn:aws:lambda:us-east-1:242593025403:layer:python-aws-xray-sdk:2
+      # DeadLetterQueue: Map | DeadLetterQueue
+      # DeploymentPreference: DeploymentPreference
+      # Environment: Environment
+      # KmsKeyArn: String
+      # EventInvokeConfig: EventInvokeConfiguration
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            # Auth: ApiFunctionAuth
+            Method: get
+            Path: /unicorns
+            # RequestModel: RequestModel
+            # RequestParameters: String | RequestParameter
+            RestApiId: !Ref APIGateway
+        ApiEvent2:
+          Type: Api
+          Properties:
+            # Auth: ApiFunctionAuth
+            Method: get
+            Path: /unicorns/{unicorn}
+            # RequestModel: RequestModel
+            # RequestParameters: String | RequestParameter
+            RestApiId: !Ref APIGateway
+      # Role: String
+      # AssumeRolePolicyDocument: JSON
+      Policies: # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
+      - DynamoDBReadPolicy:
           TableName: !Ref DynamoDBTable
       # ProvisionedConcurrencyConfig: ProvisionedConcurrencyConfig
       # ReservedConcurrentExecutions: Integer
