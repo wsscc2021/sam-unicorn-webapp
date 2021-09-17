@@ -74,8 +74,8 @@ Resources:
       # CodeSigningConfigArn: String
       Runtime: python3.9
       PackageType: Zip # Zip or Imagee
-      CodeUri: src/
-      Handler: createUnicorn.lambda_handler
+      CodeUri: src/createUnicorn
+      Handler: function.lambda_handler
       Layers:
       - arn:aws:lambda:us-east-1:242593025403:layer:python-aws-xray-sdk:2
       # DeadLetterQueue: Map | DeadLetterQueue
@@ -114,13 +114,15 @@ Resources:
       # CodeSigningConfigArn: String
       Runtime: python3.9
       PackageType: Zip # Zip or Imagee
-      CodeUri: src/
-      Handler: updateUnicorn.lambda_handler
+      CodeUri: src/updateUnicorn
+      Handler: function.lambda_handler
       Layers:
       - arn:aws:lambda:us-east-1:242593025403:layer:python-aws-xray-sdk:2
       # DeadLetterQueue: Map | DeadLetterQueue
       # DeploymentPreference: DeploymentPreference
-      # Environment: Environment
+      Environment: 
+        Variables: 
+          UNICORN_READ_FUNCTION: useast1-unicorn-getFunction
       # KmsKeyArn: String
       # EventInvokeConfig: EventInvokeConfiguration
       Events:
@@ -140,6 +142,8 @@ Resources:
       Policies: # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
       - DynamoDBWritePolicy:
           TableName: !Ref DynamoDBTable
+      - LambdaInvokePolicy:
+          FunctionName: useast1-unicorn-getFunction
       # ProvisionedConcurrencyConfig: ProvisionedConcurrencyConfig
       # ReservedConcurrentExecutions: Integer
       # Tags: Map
@@ -154,8 +158,8 @@ Resources:
       # CodeSigningConfigArn: String
       Runtime: python3.9
       PackageType: Zip # Zip or Imagee
-      CodeUri: src/
-      Handler: deleteUnicorn.lambda_handler
+      CodeUri: src/deleteUnicorn
+      Handler: function.lambda_handler
       Layers:
       - arn:aws:lambda:us-east-1:242593025403:layer:python-aws-xray-sdk:2
       # DeadLetterQueue: Map | DeadLetterQueue
@@ -176,7 +180,7 @@ Resources:
       # Role: String
       # AssumeRolePolicyDocument: JSON
       Policies: # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
-      - DynamoDBWritePolicy:
+      - DynamoDBCrudPolicy:
           TableName: !Ref DynamoDBTable
       # ProvisionedConcurrencyConfig: ProvisionedConcurrencyConfig
       # ReservedConcurrentExecutions: Integer
@@ -192,8 +196,8 @@ Resources:
       # CodeSigningConfigArn: String
       Runtime: python3.9
       PackageType: Zip # Zip or Imagee
-      CodeUri: src/
-      Handler: getUnicorn.lambda_handler
+      CodeUri: src/getUnicorn
+      Handler: function.lambda_handler
       Layers:
       - arn:aws:lambda:us-east-1:242593025403:layer:python-aws-xray-sdk:2
       # DeadLetterQueue: Map | DeadLetterQueue

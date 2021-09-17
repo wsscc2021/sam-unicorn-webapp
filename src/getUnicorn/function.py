@@ -11,7 +11,7 @@ class ContentNotFound(Exception):
 @xray_recorder.capture('lambda_handler')
 def lambda_handler(event, context):
     try:
-        if 'unicorn' in event['pathParameters']:
+        if ('pathParameters' in event) and (event['pathParameters'] is not None) and ('unicorn' in event['pathParameters']):
             result = getUnicorn(event['pathParameters']['unicorn'])
         else:
             result = scanUnicorn()
@@ -25,6 +25,7 @@ def lambda_handler(event, context):
             'body': json.dumps(f"Content not found: {error.message}")
         }
     except Exception as error:
+        print(error)
         return {
             'statusCode': 500,
             'body': json.dumps("Internal server error")
@@ -45,7 +46,7 @@ def scanUnicorn():
         )
         return [ unicorn['unicornName'] for unicorn in response['Items'] ]
     except Exception as error:
-        print("readUnicornList(): %s" % error)
+        print("scanUnicorn(): %s" % error)
         raise error
 
 @xray_recorder.capture('getUnicorn')
@@ -67,7 +68,7 @@ def getUnicorn(unicornName):
         else:
             return decimalToInteger(response['Item'])
     except Exception as error:
-        print("readUnicornList(): %s" % error)
+        print("getUnicorn(): %s" % error)
         raise error
 
 @xray_recorder.capture('decimalToInteger')

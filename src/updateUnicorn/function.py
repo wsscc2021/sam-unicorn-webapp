@@ -47,7 +47,9 @@ def isExistUnicorn(unicornName):
     try:
         lambda_client = boto3.client('lambda')
         payload = {
-            "unicorn": unicornName
+            "pathParameters": {
+                "unicorn": unicornName
+            }
         }
         response = lambda_client.invoke(
             FunctionName=os.environ['UNICORN_READ_FUNCTION'],
